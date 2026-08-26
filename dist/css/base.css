@@ -1,0 +1,75 @@
+    @font-face {
+      font-family: "Space Grotesk";
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url("../fonts/SpaceGrotesk.woff2") format("woff2");
+    }
+    :root {
+      /* 暖纸 · 番茄植物 设计系统 */
+      --paper: #F3ECDD;        /* 页面纸底 */
+      --surface: #FFFBF1;      /* 窗口 / 卡片纸面 */
+      --surface-2: #F0E8D6;    /* 次级纸面 / hover */
+      --ink: #33291C;          /* 墨色：文字与描边 */
+      --ink-soft: #7A6A56;     /* 次级文字 */
+      --tomato: #E0522D;       /* 番茄红：学习 / 主强调 */
+      --tomato-deep: #C0411F;  /* 深番茄：hover / 按下 */
+      --tomato-over: #7A1C04;  /* 超出目标：强对比深红 */
+      --leaf: #4E9A5C;         /* 叶绿：休息 */
+      --leaf-deep: #3C7A48;
+      --sand: #D9CCB2;         /* 浅描边 / 分隔 */
+      --cream: #FFF7E6;        /* 高亮浅底 */
+
+      /* 功能映射（JS 引用的变量名保持） */
+      --ring-study: #E0522D;
+      --ring-break: #4E9A5C;
+      --accent-chart: #E0522D;
+      --chart-area: rgba(224, 82, 45, 0.14);
+
+      --font-display: "Space Grotesk", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace, "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    }
+
+    /* 自定义滚动条（暖纸主题） */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--sand);
+      border: 2px solid var(--surface);
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--ink-soft);
+    }
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--paper);
+      background-image:
+        radial-gradient(circle at 18% 12%, rgba(224, 82, 45, 0.06), transparent 42%),
+        radial-gradient(circle at 84% 82%, rgba(78, 154, 92, 0.08), transparent 45%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--ink);
+      overflow: hidden;
+      position: relative;
+    }
+

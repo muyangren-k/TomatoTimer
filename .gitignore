@@ -1,0 +1,3 @@
+# 构建产物 / 发布二进制（exe 通过 GitHub Releases 分发）
+release/
+target/

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "番茄计时器",
+  "version": "1.0.0",
+  "identifier": "com.tomatotimer.desktop",
+  "build": {
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "番茄计时器",
+        "width": 900,
+        "height": 600,
+        "minWidth": 660,
+        "minHeight": 440,
+        "resizable": true,
+        "decorations": false,
+        "center": true,
+        "shadow": true,
+        "transparent": false,
+        "visible": false
+      },
+      {
+        "label": "island",
+        "title": "island",
+        "url": "index.html?island=1",
+        "width": 240,
+        "height": 56,
+        "visible": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "decorations": false,
+        "transparent": true,
+        "resizable": false,
+        "shadow": false,
+        "focus": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

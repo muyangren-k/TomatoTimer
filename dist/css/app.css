@@ -1,0 +1,49 @@
+    /* ============ Tauri 窗口适配 ============ */
+    body.island-mode {
+      background: transparent;
+    }
+    body.island-mode .window-frame {
+      display: none;
+    }
+    body.island-mode .dynamic-island {
+      position: fixed;
+      inset: 0;
+      transform: none;
+      opacity: 1;
+      pointer-events: auto;
+      justify-content: center;
+      padding: 0;
+    }
+    body.island-mode .island-content {
+      height: calc(100% - 12px); /* 上下留出铃声光芒律动的显示空间 */
+      min-height: 34px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+    body.island-mode .island-icon {
+      cursor: grab;
+    }
+    body.island-mode .island-icon:active {
+      cursor: grabbing;
+    }
+
+    /* 小尺寸灵动岛窗口：压缩胶囊内边距避免溢出 */
+    @media (max-width: 240px) {
+      body.island-mode .island-content {
+        padding: 5px 10px;
+        gap: 6px;
+      }
+    }
+
+    /* 无障碍：键盘焦点可见 */
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 3px solid rgba(224, 82, 45, 0.55);
+      outline-offset: 1px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }

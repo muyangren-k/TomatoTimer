@@ -1,0 +1,874 @@
+    /* ============ 主窗口 ============ */
+    /* 布局参数：默认「标准」，由 body.layout-* 按预设覆盖（窗口大小设置）；
+       pad 拆分为单边变量以参与 --card-min-h 的视口公式计算
+       （环形尺寸改由 .circle-container 的 flex + 容器查询自适应，见其定义）。 */
+    :root {
+      --frame-pad-t: 14px;
+      --frame-pad-r: 24px;
+      --frame-pad-b: 28px;
+      --frame-pad-l: 24px;
+      --frame-pad: var(--frame-pad-t) var(--frame-pad-r) var(--frame-pad-b) var(--frame-pad-l);
+      --frame-header-h: 44px;
+      --frame-header-mb: 14px;
+      --col-gap: 24px;
+      --card-pad-t: 20px;
+      --card-pad-r: 20px;
+      --card-pad-b: 24px;
+      --card-pad-l: 20px;
+      --card-pad: var(--card-pad-t) var(--card-pad-r) var(--card-pad-b) var(--card-pad-l);
+      --module-header-h: 96px; /* 模块头部（眉标+标题+模式栏）空间预算 */
+      --card-min-h: calc(100vh - var(--frame-pad-t) - var(--frame-pad-b) - var(--frame-header-h) - var(--frame-header-mb) - 12px);
+      --title-size: 20px;
+      --eyebrow-fs: 10px;
+      --mode-btn-pad: 4px 13px;
+      --mode-btn-fs: 12px;
+      --action-w: 178px;
+      --action-h: 50px;
+      --action-fs: 16px;
+    }
+
+    .window-frame {
+      width: 100%;
+      height: 100vh;
+      min-width: 0;
+      min-height: 0;
+      background-color: var(--surface);
+      padding: var(--frame-pad);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 标题栏 */
+    .window-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: var(--frame-header-h);
+      margin-bottom: var(--frame-header-mb);
+      cursor: move;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 10px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 6px;
+    }
+
+    .logo-tomato {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--ink);
+      font-family: var(--font-body);
+    }
+
+    .tool-btn {
+      background: var(--surface);
+      border: 1.8px solid var(--ink);
+      border-radius: 10px;
+      padding: 5px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font-body);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.12s ease;
+      box-shadow: 0 2px 0 var(--ink);
+      color: var(--ink);
+    }
+    .tool-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .tool-btn:hover {
+      background: var(--surface-2);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 0 var(--ink);
+    }
+    .tool-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 0 var(--ink);
+    }
+
+    .tool-btn.highlight {
+      background: var(--tomato);
+      border-color: var(--ink);
+      color: #FFF9F0;
+      box-shadow: 0 2px 0 var(--ink);
+    }
+    .tool-btn.highlight:hover {
+      background: var(--tomato-deep);
+    }
+    .tool-btn.highlight svg { stroke: #FFF9F0; }
+
+    .tool-btn.dev-mode.active {
+      background: #F7E8C8;
+      border-color: #9A6B1C;
+      color: #7C5513;
+      box-shadow: 0 2px 0 #9A6B1C;
+    }
+
+    .tool-btn.island-on {
+      background: #FBE3DC;
+      border-color: #D63B23;
+      color: #B64023;
+      box-shadow: 0 2px 0 #D63B23;
+    }
+
+    .tool-btn.danger {
+      background: #FBE3DC;
+      border-color: #C0411F;
+      color: #B64023;
+    }
+    .tool-btn.danger svg {
+      stroke: #B64023;
+    }
+    .tool-btn.danger:hover {
+      background: #F6D2C8;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 0 #C0411F;
+    }
+    .tool-btn.danger:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 0;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .win-btn {
+      width: 36px;
+      height: 28px;
+      background: var(--surface);
+      border: 1.8px solid var(--ink);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      line-height: 1;
+      transition: all 0.1s;
+      box-shadow: 0 2px 0 var(--ink);
+      color: var(--ink);
+    }
+    .win-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+    .win-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 0;
+    }
+    .win-btn.close:hover {
+      background: #E0522D;
+      color: white;
+      border-color: var(--ink);
+    }
+
+    /* 主体两栏 */
+    .container {
+      display: flex;
+      gap: var(--col-gap);
+      flex: 1;
+      overflow: auto;
+    }
+
+    .card-module {
+      flex: 1;
+      background-color: var(--surface);
+      border: 2px solid var(--ink);
+      border-radius: 20px;
+      padding: var(--card-pad);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: var(--card-min-h);
+      position: relative;
+      box-shadow: 0 3px 0 var(--ink);
+      transition: background-color 0.35s ease;
+    }
+
+    .card-module.is-break {
+      background-color: #EEF4E9;
+    }
+
+    .module-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      width: 100%;
+    }
+
+    .eyebrow {
+      font-family: var(--font-display);
+      font-size: var(--eyebrow-fs);
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--tomato);
+      transition: color 0.35s ease;
+    }
+    .card-module.is-break .eyebrow { color: var(--leaf); }
+
+    .module-title {
+      font-size: var(--title-size);
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .mode-switch-bar {
+      display: flex;
+      background: var(--surface-2);
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      padding: 2px;
+      gap: 2px;
+      margin-top: 3px;
+    }
+
+    .mode-btn {
+      border: none;
+      background: transparent;
+      border-radius: 999px;
+      padding: var(--mode-btn-pad);
+      font-size: var(--mode-btn-fs);
+      font-weight: 700;
+      font-family: var(--font-body);
+      color: var(--ink-soft);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .mode-btn svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .mode-btn.active {
+      background: var(--surface);
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+      box-shadow: 0 1px 3px rgba(51, 41, 28, 0.12);
+    }
+
+    /* 达标后「今日目标」切换按钮变绿 */
+    .mode-btn.done {
+      color: var(--leaf-deep);
+    }
+    .mode-btn.done.active {
+      background: #E4F2DF;
+      border-color: var(--leaf);
+      color: var(--leaf-deep);
+      box-shadow: 0 1px 3px rgba(51, 41, 28, 0.12);
+    }
+
+    /* 环形计时 */
+    /* 注意：circle 元素禁用 vector-effect: non-scaling-stroke ——
+       它会让 stroke-dasharray/dashoffset 按屏幕像素解释，
+       而 JS 的进度计算（CIRCUMFERENCE = 2π×80 = 502.65）基于 viewBox 用户单位，
+       两者单位不一致会导致进度环显示缺口/错位。
+       线宽恒定性由容器查询按环形实际大小分档补偿（见文件末尾）。 */
+    .circle-container {
+      position: relative;
+      /* 吃满卡片「模块头部」与「操作按钮」之间的真实剩余像素（flex 撑开），
+         让环形在任意默认窗口下都尽量占满可用显示区域；
+         尺寸由容器查询取剩余盒宽/高的较小值（见下方 --ring-size）。
+         环形 viewBox(220) 内 border r=95，天然留下约 7% 的可见呼吸空间，
+         因此无需额外外边距，环形视觉上自动与头部/按钮留有空隙。 */
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: none;
+      container-type: size;
+      --ring-size: clamp(140px, min(100cqw, 100cqh), 500px);
+      /* 环内文字随实际 --ring-size 等比缩放：窗口越大文字与环形比例保持恒定，
+         避免大窗口下环形变大而文字相对变小 */
+      --main-text-size: max(15px, calc(var(--ring-size) * 0.082));
+      --sub-text-size: clamp(11px, calc(var(--ring-size) * 0.047), 18px);
+    }
+
+    .circle-container.interactive {
+      cursor: grab;
+    }
+    .circle-container.interactive:active {
+      cursor: grabbing;
+    }
+
+    .circle-svg {
+      width: var(--ring-size);
+      height: var(--ring-size);
+      overflow: visible;
+      container-type: inline-size; /* 作为线宽容器查询的容器：宽度 = 环形实际尺寸 */
+      transition: width 0.25s ease, height 0.25s ease;
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: var(--sand);
+      stroke-width: 8;
+      opacity: 0.55;
+    }
+
+    .circle-fill {
+      fill: none;
+      stroke: var(--ring-study);
+      stroke-width: 8;
+      stroke-linecap: round;
+      transform-origin: 110px 110px;
+      transform: rotate(-90deg);
+      transition: stroke 0.3s;
+    }
+
+    .circle-fill-over {
+      fill: none;
+      stroke: var(--tomato-over);
+      stroke-width: 8;
+      stroke-linecap: butt;
+      transform-origin: 110px 110px;
+      transform: rotate(-90deg);
+      transition: stroke 0.3s;
+    }
+
+    .circle-border {
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 2.2;
+    }
+
+    .ring-needle {
+      fill: var(--ring-study);
+      stroke: var(--surface);
+      stroke-width: 2.5;
+      transform-origin: 110px 110px;
+      transition: transform 0.05s linear, fill 0.3s ease, stroke 0.3s ease;
+    }
+    .card-module.is-break .ring-needle {
+      fill: var(--ring-break);
+    }
+    .ring-needle-over {
+      fill: var(--tomato-over);
+      stroke: var(--surface);
+      stroke-width: 2.5;
+      transform-origin: 110px 110px;
+      transition: transform 0.05s linear, fill 0.3s ease, stroke 0.3s ease;
+    }
+
+    .circle-text-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--ring-size);
+      height: var(--ring-size);
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      padding: 0 24px;
+    }
+
+    .main-text {
+      font-size: var(--main-text-size);
+      font-weight: 700;
+      font-family: var(--font-display);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 94%;
+      line-height: 1.2;
+    }
+
+    .sub-text {
+      font-size: var(--sub-text-size);
+      color: var(--ink-soft);
+      margin-top: 5px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      text-align: center;
+      max-width: 92%;
+      line-height: 1.4;
+    }
+
+    /* 主操作按钮 */
+    .action-btn {
+      width: var(--action-w);
+      height: var(--action-h);
+      background-color: var(--tomato);
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      font-size: var(--action-fs);
+      font-weight: 800;
+      font-family: var(--font-body);
+      color: #FFF9F0;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--ink);
+      transition: all 0.1s ease;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .action-btn:hover {
+      background-color: var(--tomato-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 0 var(--ink);
+    }
+
+    .action-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--ink);
+    }
+
+    /* 学习卡片操作区：开始/停止铃声并排 */
+    .study-actions {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      justify-content: center;
+    }
+    .study-actions .action-btn {
+      flex: 1;
+      max-width: 200px;
+    }
+    .stop-ring-btn {
+      background-color: var(--surface-2);
+      color: var(--ink);
+    }
+    .stop-ring-btn:hover {
+      background-color: var(--sand);
+      color: var(--ink);
+    }
+
+    .action-btn.running {
+      background-color: #FBE3DC;
+      color: #B64023;
+    }
+    .action-btn.running:hover {
+      background-color: #F6D2C8;
+    }
+
+    .action-btn.countup-stop {
+      background-color: #FCEBD6;
+      color: #9A5B16;
+    }
+    .action-btn.countup-stop:hover {
+      background-color: #F8DFBB;
+    }
+
+    .action-btn.break-btn {
+      background-color: var(--leaf);
+      color: #FFF9F0;
+    }
+    .action-btn.break-btn:hover {
+      background-color: var(--leaf-deep);
+    }
+
+    /* ============ 闹钟面板（切到「闹钟」模式时显示） ============ */
+    .alarm-panel {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 0;
+      padding: 12px 0;
+    }
+    .alarm-add-btn svg {
+      width: 15px;
+      height: 15px;
+    }
+    .alarm-list {
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      padding: 4px 2px 4px 0;
+    }
+    .alarm-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-body);
+    }
+    .alarm-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--ink);
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 0 var(--ink);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .alarm-item:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 0 var(--ink);
+    }
+    .alarm-item.disabled {
+      opacity: 0.55;
+    }
+    .alarm-item-timewrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 76px;
+    }
+    .alarm-item-period {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      font-family: var(--font-body);
+      color: #FFF9F0;
+      background: var(--tomato);
+      line-height: 1.4;
+      letter-spacing: 0.5px;
+    }
+    .alarm-item-time {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .alarm-item-meta {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .alarm-item-note {
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font-body);
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .alarm-item-days {
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .alarm-item-day {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      font-family: var(--font-body);
+      color: var(--leaf-deep);
+      background: #E4F2DF;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .alarm-item-day.weekend {
+      color: var(--tomato-deep);
+      background: #FBE3DC;
+    }
+    .alarm-switch {
+      flex-shrink: 0;
+      width: 40px;
+      height: 22px;
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      background: var(--sand);
+      position: relative;
+      cursor: pointer;
+      padding: 0;
+      outline: none;
+      transition: background 0.15s ease;
+    }
+    .alarm-switch::after {
+      content: "";
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1.5px solid var(--ink);
+      transition: left 0.15s ease;
+    }
+    .alarm-switch.on {
+      background: var(--leaf);
+    }
+    .alarm-switch.on::after {
+      left: 19px;
+    }
+
+    /* ============ 待办清单面板（切到「待办清单」模式时显示） ============ */
+    .target-actions {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      justify-content: center;
+    }
+    .target-actions .action-btn {
+      flex: 1;
+      max-width: 200px;
+    }
+    .todo-add-btn svg {
+      width: 15px;
+      height: 15px;
+    }
+    .todo-panel {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 0;
+      padding: 12px 0;
+    }
+    .todo-list {
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      padding: 4px 2px 4px 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .todo-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-body);
+    }
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--ink);
+      border-left: 5px solid var(--tc, var(--tomato));
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 0 var(--ink);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .todo-item.color-leaf { --tc: #4E9A5C; }
+    .todo-item.color-amber { --tc: #C98F2E; }
+    .todo-item.color-blue { --tc: #4A7FBF; }
+    .todo-item.color-purple { --tc: #8A5BB8; }
+    .todo-item.color-ink { --tc: #33291C; }
+    .todo-item.color-tomato { --tc: #E0522D; }
+    .todo-item:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 0 var(--ink);
+    }
+    .todo-check {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: var(--surface);
+      cursor: pointer;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF9F0;
+      transition: background 0.15s ease;
+    }
+    .todo-check svg {
+      width: 13px;
+      height: 13px;
+      opacity: 0;
+    }
+    .todo-check.on {
+      background: var(--tomato);
+    }
+    .todo-check.on svg {
+      opacity: 1;
+    }
+    .todo-text {
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      color: var(--ink);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .todo-item.done .todo-text {
+      color: var(--ink-soft);
+      text-decoration: line-through;
+      text-decoration-color: var(--tomato);
+    }
+    .todo-item.dragging {
+      transition: none;
+      opacity: 0.75;
+      background: var(--surface);
+      box-shadow: 0 6px 0 var(--ink);
+      cursor: grabbing;
+    }
+
+    /* ============ 窗口边缘拖拽缩放手柄（右 / 下 / 右下角） ============ */
+    .resize-handle {
+      position: absolute;
+      z-index: 50;
+      touch-action: none;
+    }
+    .resize-handle[data-resize="east"] {
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 100%;
+      cursor: ew-resize;
+    }
+    .resize-handle[data-resize="south"] {
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 8px;
+      cursor: ns-resize;
+    }
+    .resize-handle[data-resize="southeast"] {
+      right: 0;
+      bottom: 0;
+      width: 14px;
+      height: 14px;
+      cursor: nwse-resize;
+    }
+
+    /* ============ 主界面窗口大小预设布局（设置 → 主界面窗口大小） ============ */
+    /* 注意：不覆盖 --card-min-h；环形尺寸不在此处硬编码，
+       而是由 .circle-container 的 flex 布局在每档预设窗口下自适应吃满剩余空间。 */
+    body.layout-compact {
+      --frame-pad-t: 12px;
+      --frame-pad-r: 16px;
+      --frame-pad-b: 18px;
+      --frame-pad-l: 16px;
+      --frame-header-h: 38px;
+      --frame-header-mb: 8px;
+      --col-gap: 14px;
+      --card-pad-t: 12px;
+      --card-pad-r: 12px;
+      --card-pad-b: 16px;
+      --card-pad-l: 12px;
+      --module-header-h: 80px; /* 紧凑档头部字号更小，缩小预算让环形拿到更多高度 */
+      --title-size: 16px;
+      --eyebrow-fs: 9px;
+      --mode-btn-pad: 3px 9px;
+      --mode-btn-fs: 11px;
+      --action-w: 140px;
+      --action-h: 42px;
+      --action-fs: 14px;
+    }
+    body.layout-wide {
+      --frame-pad-t: 16px;
+      --frame-pad-r: 28px;
+      --frame-pad-b: 30px;
+      --frame-pad-l: 28px;
+      --col-gap: 28px;
+      --card-pad-t: 22px;
+      --card-pad-r: 22px;
+      --card-pad-b: 26px;
+      --card-pad-l: 22px;
+      --title-size: 21px;
+      --eyebrow-fs: 11px;
+      --action-w: 188px;
+      --action-h: 52px;
+      --action-fs: 17px;
+    }
+    body.layout-large {
+      --frame-pad-t: 18px;
+      --frame-pad-r: 32px;
+      --frame-pad-b: 32px;
+      --frame-pad-l: 32px;
+      --frame-header-h: 48px;
+      --col-gap: 32px;
+      --card-pad-t: 24px;
+      --card-pad-r: 24px;
+      --card-pad-b: 28px;
+      --card-pad-l: 24px;
+      --title-size: 23px;
+      --eyebrow-fs: 11px;
+      --mode-btn-pad: 4px 15px;
+      --mode-btn-fs: 13px;
+      --action-w: 196px;
+      --action-h: 54px;
+      --action-fs: 18px;
+    }
+
+    /* 环形线宽分档补偿：环形随 viewBox(220) 整体缩放，按环形实际大小微调 stroke-width，
+       使视觉线宽稳定（仅调粗细，不影响 stroke-dasharray 的 viewBox 坐标进度逻辑）。
+       注：外圈 .circle-border 是细描边（默认 2.2），不参与粗线补偿，单独保持视觉 ~2.2px 恒定 */
+    @container (max-width: 200px) {
+      .circle-bg, .circle-fill, .circle-fill-over { stroke-width: 11; }
+      .circle-border { stroke-width: 2.5; }
+    }
+    @container (min-width: 320px) {
+      .circle-bg, .circle-fill, .circle-fill-over { stroke-width: 5.7; }
+      .circle-border { stroke-width: 1.5; }
+    }
+
