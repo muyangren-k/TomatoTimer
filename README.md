@@ -50,7 +50,7 @@
 ```
 
 ## 快速开始
-从MicroSoft Store下载：ms-windows-store://pdp/?productid=9N4T1H1ZWZFB
+从MicroSoft Store下载：[ms-windows-store://pdp/?productid=9N4T1H1ZWZFB](https://apps.microsoft.com/detail/9N4T1H1ZWZFB)
 
 
 从 [发布](https://github.com/muyangren-k/TomatoTimer/releases) 下载 `TomatoTimer-v1.0.0-Windows.exe`，双击运行（便携单文件，无需安装）。
