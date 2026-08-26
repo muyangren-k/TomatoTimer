@@ -6,53 +6,35 @@
 
 **主界面展示**
 
-<p align="center">
-  <img src="screenshots/主界面.png" alt="主界面" width="600">
-</p>
+![主界面](screenshots/主界面.png)
 
 ## 功能特性
 
 - **学习计时**：倒计时 / 正向计时两种学习模式。
 
-<p align="center">
-  <img src="screenshots/正向计时.png" alt="正向计时" width="600">
-</p>
-
-<p align="center">
-  <img src="screenshots/倒计时.png" alt="倒计时" width="600">
-</p>
+| 正向计时 | 倒计时 |
+|---|---|
+| ![正向计时](screenshots/正向计时.png) | ![倒计时](screenshots/倒计时.png) |
 
 - **自动休息 + 每日目标**：学习结束自动休息（依照比例计算），设定目标并自动记录每日时长。
 
-<p align="center">
-  <img src="screenshots/自动休息.png" alt="自动休息" width="600">
-</p>
-
-<p align="center">
-  <img src="screenshots/每日目标.png" alt="每日目标" width="600">
-</p>
+| 自动休息 | 每日目标 |
+|---|---|
+| ![自动休息](screenshots/自动休息.png) | ![每日目标](screenshots/每日目标.png) |
 
 - **闹钟 + 待办清单**：提供闹钟与待办清单功能，避免忘记重要事项。
 
-<p align="center">
-  <img src="screenshots/闹钟.png" alt="闹钟" width="600">
-</p>
-
-<p align="center">
-  <img src="screenshots/待办清单.png" alt="待办清单" width="600">
-</p>
+| 闹钟 | 待办清单 |
+|---|---|
+| ![闹钟](screenshots/闹钟.png) | ![待办清单](screenshots/待办清单.png) |
 
 - **灵动胶囊**：计时中最小化后，顶部悬浮胶囊显示剩余时间，拖动图标移动、点击恢复、悬停执行快捷键。
 
-<p align="center">
-  <img src="screenshots/灵动胶囊.png" alt="灵动胶囊" width="600">
-</p>
+![灵动胶囊](screenshots/灵动胶囊.png)
 
 - **多维数据统计**：按 7 / 14 / 30 天或 1 年粒度的柱 / 折线图，4 个指标卡，月度累计列表，每日明细日历。
 
-<p align="center">
-  <img src="screenshots/多维数据统计.png" alt="多维数据统计" width="600">
-</p>
+![多维数据统计](screenshots/多维数据统计.png)
 
 - **数据管理**：学习记录持久化于本地，支持 JSON 导出 / 导入（json 格式如下）：
 
