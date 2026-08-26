@@ -69,7 +69,7 @@
 
 ## 快速开始
 
-从 [Releases](https://github.com/muyangren-k/TTomatoTimer/releases) 下载 `TomatoTimer-v1.0.0-Windows.exe`，双击运行（便携单文件，无需安装）。
+从 [Releases](https://github.com/muyangren-k/TomatoTimer/releases) 下载 `TomatoTimer-v1.0.0-Windows.exe`，双击运行（便携单文件，无需安装）。
 
 - 依赖：WebView2 Runtime（Windows 10 1809+ 一般已内置）
 - 数据保存在本地应用数据目录，更换位置不丢失
