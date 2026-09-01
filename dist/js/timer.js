@@ -82,7 +82,8 @@
         lastTickAt = now;
         if (delta < 1) delta = 1;
         if (isDevSpeed) delta *= 60;
-        const todayStr = getTodayStr();
+        // 学习时长按「本次计时开始日期」记录，跨天不写到第二天
+        const todayStr = sessionDateStr || getTodayStr();
 
         if (currentMode === 'STUDY' && timerType === 'COUNTDOWN') {
           if (remainSeconds > 0) {
@@ -104,6 +105,12 @@
             breakTotalSeconds = breakMinutes * 60;
             remainSeconds = breakTotalSeconds;
             currentMode = 'BREAK';
+            // 学习阶段结束：若已跨天，界面累计切回当前日期的累计值
+            if (sessionDateStr && sessionDateStr !== getTodayStr()) {
+              totalStudiedSeconds = studyHistory[getTodayStr()] || 0;
+            }
+            sessionDateStr = null;
+            updateTargetDisplay();
             updateStudyDisplay();
             startTimerLoop();
           }
@@ -130,6 +137,12 @@
             breakTotalSeconds = Math.max(10, calcBreakSec);
             remainSeconds = breakTotalSeconds;
             currentMode = 'BREAK';
+            // 学习阶段结束：若已跨天，界面累计切回当前日期的累计值
+            if (sessionDateStr && sessionDateStr !== getTodayStr()) {
+              totalStudiedSeconds = studyHistory[getTodayStr()] || 0;
+            }
+            sessionDateStr = null;
+            updateTargetDisplay();
             updateStudyDisplay();
             startTimerLoop();
           }
@@ -143,6 +156,12 @@
             clearInterval(timer);
             playAlarm();
             currentMode = 'IDLE';
+            // 学习会话已结束：若跨天，界面累计切回当前日期的累计值
+            if (sessionDateStr && sessionDateStr !== getTodayStr()) {
+              totalStudiedSeconds = studyHistory[getTodayStr()] || 0;
+            }
+            sessionDateStr = null;
+            updateTargetDisplay();
             if (timerType === 'COUNTDOWN') {
               remainSeconds = selectedMinutes * 60;
             } else {

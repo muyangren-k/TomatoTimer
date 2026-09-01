@@ -45,6 +45,7 @@
 
     let timerType = 'COUNTDOWN';
     let currentMode = 'IDLE';
+    let sessionDateStr = null; // 当前学习计时归属的日期；跨天时仍记录到开始计时的那一天
     let studyView = 'RING';    // 学习卡片子视图：'RING' 圆环（倒计时/正向计时）| 'ALARM' 闹钟面板；仅切换显示，不打断运行中的计时
 
     let selectedMinutes = 45;

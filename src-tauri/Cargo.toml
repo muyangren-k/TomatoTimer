@@ -1,6 +1,6 @@
 [package]
 name = "tomato-timer"
-version = "1.0.0"
+version = "1.1.0"
 description = "番茄计时器 · 桌面番茄钟"
 authors = ["knight"]
 edition = "2021"

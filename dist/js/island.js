@@ -354,6 +354,9 @@
           return;
         }
         currentMode = 'STUDY';
+        // 记录本次学习归属日期；跨天时全部时长都计入开始计时这一天
+        sessionDateStr = getTodayStr();
+        totalStudiedSeconds = studyHistory[sessionDateStr] || 0;
         if (timerType === 'COUNTDOWN') {
           remainSeconds = selectedMinutes * 60;
         } else {
@@ -374,16 +377,27 @@
             breakTotalSeconds = Math.max(10, calcBreakSec);
             remainSeconds = breakTotalSeconds;
             currentMode = 'BREAK';
+            // 学习阶段结束：若已跨天，界面累计切回当前日期的累计值
+            if (sessionDateStr && sessionDateStr !== getTodayStr()) {
+              totalStudiedSeconds = studyHistory[getTodayStr()] || 0;
+            }
+            sessionDateStr = null;
+            updateTargetDisplay();
             updateStudyDisplay();
             startTimerLoop();
           } else {
             currentMode = 'IDLE';
             remainSeconds = selectedMinutes * 60;
             // 不足最小时长：本次不计入累计数据
-            const todayStr = getTodayStr();
+            const todayStr = sessionDateStr || getTodayStr();
             totalStudiedSeconds = Math.max(0, totalStudiedSeconds - elapsedSec);
             studyHistory[todayStr] = totalStudiedSeconds;
             saveHistoryData();
+            // 会话结束：若已跨天，界面累计切回当前日期的累计值
+            if (sessionDateStr && sessionDateStr !== getTodayStr()) {
+              totalStudiedSeconds = studyHistory[getTodayStr()] || 0;
+            }
+            sessionDateStr = null;
             if (islandInUse) {
               // 灵动岛驻留：保留胶囊，回待机并红框闪烁
               updateStudyDisplay();
@@ -401,12 +415,18 @@
           clearInterval(timer);
           if (countupSeconds < minStudyMinutes * 60) {
             // 不足最小时长：回滚本次学习数据，不进入休息
-            const todayStr = getTodayStr();
+            const todayStr = sessionDateStr || getTodayStr();
             totalStudiedSeconds = Math.max(0, totalStudiedSeconds - countupSeconds);
             studyHistory[todayStr] = totalStudiedSeconds;
             saveHistoryData();
             countupSeconds = 0;
             currentMode = 'IDLE';
+            // 会话结束：若已跨天，界面累计切回当前日期的累计值
+            if (sessionDateStr && sessionDateStr !== getTodayStr()) {
+              totalStudiedSeconds = studyHistory[getTodayStr()] || 0;
+            }
+            sessionDateStr = null;
+            updateTargetDisplay();
             if (islandInUse) {
               // 灵动岛驻留：保留胶囊，回待机并红框闪烁
               updateStudyDisplay();
@@ -427,6 +447,12 @@
           remainSeconds = breakTotalSeconds;
 
           currentMode = 'BREAK';
+          // 学习阶段结束：若已跨天，界面累计切回当前日期的累计值
+          if (sessionDateStr && sessionDateStr !== getTodayStr()) {
+            totalStudiedSeconds = studyHistory[getTodayStr()] || 0;
+          }
+          sessionDateStr = null;
+          updateTargetDisplay();
           updateStudyDisplay();
           startTimerLoop();
         }
@@ -434,6 +460,12 @@
       else if (currentMode === 'BREAK') {
         clearInterval(timer);
         currentMode = 'IDLE';
+        // 会话结束：若已跨天，界面累计切回当前日期的累计值
+        if (sessionDateStr && sessionDateStr !== getTodayStr()) {
+          totalStudiedSeconds = studyHistory[getTodayStr()] || 0;
+        }
+        sessionDateStr = null;
+        updateTargetDisplay();
         if (timerType === 'COUNTDOWN') {
           remainSeconds = selectedMinutes * 60;
         } else {
